@@ -1,16 +1,19 @@
-def import -params 1 %{
-    source %sh{echo $XDG_CONFIG_HOME/kak/$1.kak}
+# enable full color override on tmux
+%sh{tic ${kak_config}/tmux-256color.terminfo}
+
+def import -allow-override -params 1 %{
+    source %sh{echo ${kak_config}/$1.kak}
 }
 
-def plug -params 1..2 %{
+def plug -allow-override -params 1..2 %{
   %sh{
-    mkdir -p $XDG_CONFIG_HOME/kak/plugins/
-    if [[ ! -d $XDG_CONFIG_HOME/kak/plugins/$1 ]]; then
-      (cd $XDG_CONFIG_HOME/kak/plugins; git clone https://github.com/$1 2> /dev/null)
+    mkdir -p ${kak_config}/plugins/
+    if [[ ! -d ${kak_config}/plugins/$1 ]]; then
+      (cd ${kak_config}/plugins; git clone https://github.com/$1 2> /dev/null)
     else
-      (cd $XDG_CONFIG_HOME/kak/plugins/$1; git pull 2> /dev/null)
+      (cd ${kak_config}/plugins/$1; git pull 2> /dev/null)
     fi
-    for file in $(echo $XDG_CONFIG_HOME/kak/plugins/$(basename $1)/$2*.kak); do
+    for file in $(echo ${kak_config}/plugins/$(basename $1)/$2*.kak); do
       echo source "$file"
     done
   }
@@ -111,7 +114,7 @@ hook global NormalKey <esc> %{ try %{
 }}
 
 # launch ide; opens window for tool output (i.e. :grep)
-def ide %{
+def -allow-override ide %{
   rename-client main
   set global jumpclient main
 
@@ -121,7 +124,7 @@ def ide %{
   focus main
 }
 
-define-command kakrc -docstring "Open kakrc" %{
-    edit ~/.config/kak/kakrc
+define-command -allow-override kakrc -docstring "Open kakrc" %{
+  edit ~/.config/kak/kakrc
 }
 

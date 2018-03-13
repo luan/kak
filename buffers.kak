@@ -5,7 +5,7 @@ hook global WinDisplay .* %{
     buffers-info
 }
 
-define-command buffers-info %{
+define-command -allow-override buffers-info %{
     eval -save-regs 'bc' %{ 
         set-register b %val{bufname}
         set-register c ''
@@ -33,7 +33,7 @@ define-command buffers-info %{
     }
 }
 
-define-command buffers-info-filtered %{
+define-command -allow-override buffers-info-filtered %{
     %sh{
         case "$kak_client" in
             tools) printf "exec "
@@ -47,7 +47,7 @@ define-command buffers-info-filtered %{
 }
 
 # hella fast
-define-command buffers-info-native -params ..1 %{
+define-command -allow-override buffers-info-native -params ..1 %{
     eval -no-hooks -save-regs '"/bi' %{
 
         # debug so that it doesn't get iterated over

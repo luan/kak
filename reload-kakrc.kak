@@ -18,9 +18,8 @@ hook -group reload_kak global BufWritePost (.*kakrc|.*\.kak) %{
     sed 's#.*add-highlighter shared/ regions -default \w\+ \(\w\+\).*#rmhl shared/\1#'
   }
   %sh{
-    sed -i 's/^def \([^:]*\)$/def -allow-override \1/' $kak_opt_reload_file
-    sed -i 's/^define-command \([^:]*\)$/def -allow-override \1/' $kak_opt_reload_file
     sed -i 's/^plug/#/' $kak_opt_reload_file
+
   }
   source %opt{reload_file}
   echo Reloaded %val{bufname}
